@@ -1,11 +1,14 @@
 package edu.kpi.testcourse.logic;
 
+import static edu.kpi.testcourse.logic.utils.Validator.isValidByRegex;
+
 import edu.kpi.testcourse.entities.UrlAlias;
 import edu.kpi.testcourse.entities.User;
 import edu.kpi.testcourse.storage.UrlRepository;
 import edu.kpi.testcourse.storage.UrlRepository.AliasAlreadyExist;
 import edu.kpi.testcourse.storage.UserRepository;
 import java.util.List;
+
 
 /**
  * Business logic of the URL shortener application.
@@ -14,6 +17,11 @@ public class Logic {
   private final UserRepository users;
   private final UrlRepository urls;
   private final HashUtils hashUtils;
+
+  /*public static final String ALIAS_REGEX = "\\w+\\.?";
+  public static final String URL_REGEX = "(http:\\/\\/|https:\\/\\/)?(www.)"
+                      + "?([a-zA-Z0-9]+).[a-zA-Z0-9]*.[a-z]{3}.?([a-z]+)?";*/
+
 
   /**
    * Creates an instance.
@@ -65,17 +73,14 @@ public class Logic {
    * @return a shortened URL
    */
   public String createNewAlias(String email, String url, String alias) throws AliasAlreadyExist {
-    String finalAlias;
-    if (alias == null || alias.isEmpty()) {
-      // TODO: Generate short alias
-      throw new UnsupportedOperationException("Is not implemented yet");
+
+    if (urls.findUrlAlias(alias) == null) {
+      urls.createUrlAlias(new UrlAlias(alias, url, email));
     } else {
-      finalAlias = alias;
+      throw new AliasAlreadyExist();
     }
 
-    urls.createUrlAlias(new UrlAlias(finalAlias, url, email));
-
-    return finalAlias;
+    return alias;
   }
 
   /**
@@ -108,6 +113,15 @@ public class Logic {
   public static class UserIsAlreadyCreated extends Throwable {
     public UserIsAlreadyCreated() {
       super("User with such email is already created");
+    }
+  }
+
+  /**
+   * Error for situation when we are trying to register already registered user.
+   */
+  public static class InvalidDataFormatException extends RuntimeException {
+    public InvalidDataFormatException() {
+      super("Make sure that your alias is not an alphanumeric and your url is correct");
     }
   }
 
