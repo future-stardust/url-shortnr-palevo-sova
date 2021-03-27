@@ -17,9 +17,9 @@ public class Logic {
   private final UrlRepository urls;
   private final HashUtils hashUtils;
 
-  public static final String ALIAS_REGEX = "\\w+\\.?";
+  /*public static final String ALIAS_REGEX = "\\w+\\.?";
   public static final String URL_REGEX = "(http:\\/\\/|https:\\/\\/)?(www.)"
-                      + "?([a-zA-Z0-9]+).[a-zA-Z0-9]*.[a-z]{3}.?([a-z]+)?";
+                      + "?([a-zA-Z0-9]+).[a-zA-Z0-9]*.[a-z]{3}.?([a-z]+)?";*/
 
 
   /**
@@ -73,12 +73,10 @@ public class Logic {
    */
   public String createNewAlias(String email, String url, String alias) throws AliasAlreadyExist {
 
-    if (isValidByRegex(url, URL_REGEX)
-        && isValidByRegex(alias, ALIAS_REGEX)
-        && urls.findUrlAlias(alias) == null) {
+    if (urls.findUrlAlias(alias) == null) {
       urls.createUrlAlias(new UrlAlias(alias, url, email));
     } else {
-      throw new InvalidDataFormatException();
+      throw new AliasAlreadyExist();
     }
 
     return alias;

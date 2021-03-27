@@ -10,9 +10,9 @@ import java.util.regex.Pattern;
  */
 public class Validator {
 
-  public static boolean isValidByRegex(String compareUrl, String regex) {
+  public static boolean isValidByRegex(String compareString, String regex) {
     Pattern pattern = compile(regex);
-    return !isEmpty(compareUrl) && pattern.matcher(compareUrl).matches();
+    return !isEmpty(compareString) && pattern.matcher(compareString).matches();
   }
 
 }
