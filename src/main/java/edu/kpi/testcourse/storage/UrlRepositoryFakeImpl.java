@@ -1,8 +1,11 @@
 package edu.kpi.testcourse.storage;
 
 import edu.kpi.testcourse.entities.UrlAlias;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 /**
@@ -21,19 +24,28 @@ public class UrlRepositoryFakeImpl implements UrlRepository {
   }
 
   @Override
-  public @Nullable UrlAlias findUrlAlias(String alias) {
+  public @Nullable
+  UrlAlias findUrlAlias(String alias) {
     return aliases.get(alias);
   }
 
   @Override
   public void deleteUrlAlias(String email, String alias) {
-    // TODO: We should implement it
-    throw new UnsupportedOperationException();
+    for (UrlAlias currentAlias:
+      getAllAliasesForUser(email)) {
+      if(currentAlias.alias().equals(alias)) {
+        aliases.remove(alias);
+        return;
+      }
+    }
+    throw new RuntimeException("Alias " + alias + " was not found among created by the user");
   }
 
   @Override
   public List<UrlAlias> getAllAliasesForUser(String userEmail) {
-    // TODO: We should implement it
-    throw new UnsupportedOperationException();
+    return aliases.values()
+      .stream()
+      .filter(urlAlias -> urlAlias.email().equals(userEmail))
+      .collect(Collectors.toList());
   }
 }
