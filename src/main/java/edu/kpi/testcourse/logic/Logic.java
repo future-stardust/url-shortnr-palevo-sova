@@ -6,6 +6,8 @@ import edu.kpi.testcourse.storage.UrlRepository;
 import edu.kpi.testcourse.storage.UrlRepository.AliasAlreadyExist;
 import edu.kpi.testcourse.storage.UserRepository;
 
+import java.util.List;
+
 /**
  * Business logic of the URL shortener application.
  */
@@ -91,6 +93,10 @@ public class Logic {
     }
 
     return null;
+  }
+
+  public List<UrlAlias> getUserUrls(String email) {
+    return urls.getAllAliasesForUser(email);
   }
 
   public void deleteAlias(String email, String alias) throws UrlRepository.AliasNotExist {
