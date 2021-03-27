@@ -1,8 +1,6 @@
 package edu.kpi.testcourse.storage;
 
 import edu.kpi.testcourse.entities.UrlAlias;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,9 +29,9 @@ public class UrlRepositoryFakeImpl implements UrlRepository {
 
   @Override
   public void deleteUrlAlias(String email, String alias) {
-    for (UrlAlias currentAlias:
-      getAllAliasesForUser(email)) {
-      if(currentAlias.alias().equals(alias)) {
+    for (UrlAlias currentAlias :
+        getAllAliasesForUser(email)) {
+      if (currentAlias.alias().equals(alias)) {
         aliases.remove(alias);
         return;
       }
